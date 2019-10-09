@@ -14,7 +14,7 @@ app.title='knn'
 ########### Set up the layout
 
 app.layout = html.Div(children=[
-    html.H1('Nats Gonna Win!!),
+    html.H1('Nats Gonna Win!!'),
     html.Div([
         html.Div([
             html.Div([
@@ -54,8 +54,9 @@ app.layout = html.Div(children=[
         html.Div([
             html.H6(id='message'),
         ], className='twelve columns'),
+        html.Div(id='output-message', children=''),
     html.Br(),
-    html.A('Code on Github', href='https://github.com/austinlasseter/knn_iris_plotly'),
+    html.A('Code on Github', href='https://github.com/brandonmoore38/intro_knn_plotly'),
     ])
 ])
 
