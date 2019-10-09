@@ -14,7 +14,7 @@ app.title='knn'
 ########### Set up the layout
 
 app.layout = html.Div(children=[
-    html.H1('Classification of Iris Flowers'),
+    html.H1('Nats Gonna Win!!),
     html.Div([
         html.Div([
             html.Div([
@@ -59,7 +59,23 @@ app.layout = html.Div(children=[
     ])
 ])
 
+######### Define Callbacks
 
+@app.callback(Output('message', 'children'),
+              [Input('k-drop', 'value'),
+               Input('slider-1', 'value'),
+               Input('slider-2', 'value')])
+def display_results(k, value0, value1):
+    # read in the correct model
+    file = open(f'resources/model_k{k}.pkl', 'rb')
+    model=pickle.load(file)
+    file.close()
+    # define the new observation from the slide values
+    new_observation=[[value0, value1]]
+    prediction=model.predict(new_observation)
+    specieslist=['setosa', 'versicolor', 'virginica']
+    species_prediction=specieslist[prediction[0]]
+    return f'For a flower with sepal length {value0} and petal length {value1}, the predicted species is "{specieslist[species]}".'
 
 ############ Execute the app
 if __name__ == '__main__':
