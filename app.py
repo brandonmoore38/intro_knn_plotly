@@ -12,72 +12,63 @@ server = app.server
 app.title='knn'
 
 ########### Set up the layout
-
 app.layout = html.Div(children=[
-    html.H1('Nats Gonna Win!!'),
+    html.H1('NATS GONNA WIN!!!!'),
     html.Div([
-        html.Div([
-            html.Div([
-                html.H6('Sepal Length'),
-                dcc.Slider(
-                    id='slider-1',
-                    min=1,
-                    max=8,
-                    step=0.1,
-                    marks={i:str(i) for i in range(1, 9)},
-                    value=5
-                ),
-            html.Br(),
-            ], className='four columns'),
-            html.Div([
-                html.H6('Petal Length'),
-                dcc.Slider(
-                    id='slider-2',
-                    min=1,
-                    max=8,
-                    step=0.1,
-                    marks={i:str(i) for i in range(1, 9)},
-                    value=5
-                ),
-            html.Br(),
-            ], className='four columns'),
-            html.Div([
-                html.H6('# of Neighbors:'),
-                dcc.Dropdown(
-                    id='k-drop',
-                    options=[{'label': i, 'value': i} for i in [5,10,15,20,25]],
-                    value=5
-                ),
-            html.Br(),
-            ], className='four columns'),
-        ], className='twelve columns'),
-        html.Div([
-            html.H6(id='message'),
-        ], className='twelve columns'),
-        html.Div(id='output-message', children=''),
+        html.H6('Sepal Length'),
+            dcc.Slider(
+                id='slider-1',
+                min=1,
+                max=8,
+                step=0.1,
+                marks={i:str(i) for i in range(1,9)},
+                value=5,
+            ),
+        html.Br(),
+        html.H6('Sepal Width'),
+                    dcc.Slider(
+                        id='slider-2',
+                        min=1,
+                        max=8,
+                        step=0.1,
+                        marks={i:str(i) for i in range(1,9)},
+                        value=5,
+                    ),
+        html.Br(),
+        html.H6('# of Neighbors'),
+        dcc.Dropdown(
+            id = 'k-drop',
+            options=[{'label':5, 'value':5},
+                    {'label':10, 'value':10},
+                    {'label':15, 'value':15},
+                    {'label':20, 'value':20},
+                    {'label':25, 'value':25}
+            ],
+            # options = [{'label': i, 'value':i} for i in [5,10,15,20,25]],
+            value=5
+        )
+    ]),
+    html.Div(id='output-message', children=''),
     html.Br(),
-    html.A('Code on Github', href='https://github.com/brandonmoore38/intro_knn_plotly'),
-    ])
+    html.A('Code on Github', href='https://github.com/austinlasseter/knn_iris_plotly'),
 ])
 
-######### Define Callbacks
-
-@app.callback(Output('message', 'children'),
-              [Input('k-drop', 'value'),
-               Input('slider-1', 'value'),
-               Input('slider-2', 'value')])
-def display_results(k, value0, value1):
-    # read in the correct model
+######## Callback go here
+@app.callback(Output('output-message', 'children'),
+                [Input('k-drop', 'value'),
+                 Input('slider-1', 'value'),
+                 Input('slider-2', 'value')
+                ])
+def my_funky_function(k, value0, value1):
+    # read in the chosen model
     file = open(f'resources/model_k{k}.pkl', 'rb')
-    model=pickle.load(file)
+    model = pickle.load(file)
     file.close()
-    # define the new observation from the slide values
-    new_observation=[[value0, value1]]
-    prediction=model.predict(new_observation)
-    specieslist=['setosa', 'versicolor', 'virginica']
-    species_prediction=specieslist[prediction[0]]
-    return f'For a flower with sepal length {value0} and petal length {value1}, the predicted species is "{specieslist[species]}".'
+    # define the new observation from the chosen values
+    new_obs=[[value0, value1]]
+    my_prediction = model.predict(new_obs)
+    return f'you chose {k} and the predicted species number is: {my_prediction}'
 
 ############ Execute the app
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True)
