@@ -50,7 +50,7 @@ app.layout = html.Div(children=[
     ]),
     html.Div(id='output-message', children=''),
     html.Br(),
-    html.A('Code on Github', href='https://github.com/austinlasseter/knn_iris_plotly'),
+    html.A('Code on Github', href='https://github.com/brandonmoore38/knn_iris_plotly'),
 ])
 
 ######## Callback go here
@@ -65,9 +65,22 @@ def my_funky_function(k, value0, value1):
     model = pickle.load(file)
     file.close()
     # define the new observation from the chosen values
-    new_obs=[[value0, value1]]
+    new_obs=[[4.9, 2.7]]
+    import numpy as np
+    new_obs2=np.array([[4.9,2.7]])
+    mymodel.predict(new_obs2)
+    mymodel.kneighbors(new_obs)
     my_prediction = model.predict(new_obs)
     return f'you chose {k} and the predicted species number is: {my_prediction}'
+
+### Create multiple KNN models and pickle for use in the plotly dash app.
+for k in [5, 10, 15, 20, 25]:
+    mymodel = KNeighborsClassifier(n_neibors=k, weights='distance', metric='euclidean')
+    mymodel.fit(X_train, y_train)
+    y_preds = mymodel.predict(X_test)
+    file = open(f'resources/model_k{k}.pkl','wb')
+    pickle.dump(mymodel, file)
+    file.close()
 
 ############ Execute the app
 if __name__ == '__main__':
