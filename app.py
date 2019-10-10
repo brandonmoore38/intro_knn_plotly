@@ -6,6 +6,11 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 import pickle
 
+# Modeling
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+
 ########### Initiate the app
 app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 server = app.server
@@ -75,7 +80,7 @@ def my_funky_function(k, value0, value1):
 
 ### Create multiple KNN models and pickle for use in the plotly dash app.
 for k in [5, 10, 15, 20, 25]:
-    mymodel = KNeighborsClassifier(n_neibors=k, weights='distance', metric='euclidean')
+    mymodel = KNeighborsClassifier(n_neighbors=k, weights='distance', metric='euclidean')
     mymodel.fit(X_train, y_train)
     y_preds = mymodel.predict(X_test)
     file = open(f'resources/model_k{k}.pkl','wb')
