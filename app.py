@@ -11,6 +11,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 
+# read in the iris data which is included with sklearn
+from sklearn.datasets import load_iris
+iris = load_iris()
+
 ########### Initiate the app
 app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 server = app.server
@@ -77,6 +81,11 @@ def my_funky_function(k, value0, value1):
     mymodel.kneighbors(new_obs)
     my_prediction = model.predict(new_obs)
     return f'you chose {k} and the predicted species number is: {my_prediction}'
+
+# convert these values into a dataframe
+df = pd.DataFrame(iris.data, columns=['sl', 'sw', 'pl', 'pw'])
+df['species']=iris.target
+df.head()
 
 # establish the predictors and the target
 X = df[['sl', 'pl']]
