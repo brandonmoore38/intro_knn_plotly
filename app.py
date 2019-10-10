@@ -78,6 +78,24 @@ def my_funky_function(k, value0, value1):
     my_prediction = model.predict(new_obs)
     return f'you chose {k} and the predicted species number is: {my_prediction}'
 
+# establish the predictors and the target
+X = df[['sl', 'pl']]
+y = df['species']
+# train-test split
+X_train, X_test, y_train, y_test = train_test_split(X , y,
+                         test_size=0.3, random_state=52 )
+print('length of y-test:', len(y_test))
+# instantiate the classifier
+mymodel = KNeighborsClassifier(n_neighbors=5, weights='distance', metric='euclidean')
+# fit on the training data
+mymodel.fit(X_train, y_train)
+# predict on the testing data
+y_preds = mymodel.predict(X_test)
+# evaluate the model performance
+print('accuracy score: ', round(metrics.accuracy_score(y_test, y_preds),2))
+# examine the confusion matrix
+pd.DataFrame(metrics.confusion_matrix(y_test, y_preds))
+
 ### Create multiple KNN models and pickle for use in the plotly dash app.
 for k in [5, 10, 15, 20, 25]:
     mymodel = KNeighborsClassifier(n_neighbors=k, weights='distance', metric='euclidean')
